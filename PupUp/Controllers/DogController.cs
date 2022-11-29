@@ -35,6 +35,7 @@ namespace PupUp.Controllers
         public async Task<IActionResult> Dog(int id)
         {
             var dog = await m_dbContext.Dogs.Include(d => d.TrainingStates).ThenInclude(c => c.Training).FirstOrDefaultAsync(d => d.Id == id);
+            ViewData["Events"] = m_dbContext.Events.Include(e => e.User).Where(d => d.UserId != User.Claims.GetClaim(ClaimTypes.NameIdentifier)).ToList();
             return View(dog);
         }
         public IActionResult Create()

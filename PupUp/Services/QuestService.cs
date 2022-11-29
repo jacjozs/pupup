@@ -65,7 +65,7 @@ namespace PupUp.Services
                     case ActionType.StartTraining:
                     case ActionType.LearnTraning:
                     case ActionType.SkillTraining:
-                        if (trainingId.HasValue && pair.Quest.ListenTrainingIds.Count > 0 && pair.Quest.ListenTrainingIds.Contains(trainingId.Value))
+                        if (trainingId.HasValue && pair.Quest.ListenTrainingIds.Count > 0 && !pair.Quest.ListenTrainingIds.Contains(trainingId.Value))
                             continue;
                         break;
                     default:
