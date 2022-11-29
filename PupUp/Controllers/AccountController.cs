@@ -57,18 +57,18 @@ namespace PupUp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken()]
-        public async Task<IActionResult> Validate(string username, string password, string returnUrl)
+        public async Task<IActionResult> Validate(string UserName, string Password, string returnUrl)
         {
             returnUrl = string.IsNullOrEmpty(returnUrl) ? "/" : returnUrl;
             ViewData["ReturnUrl"] = returnUrl;
             ViewData["Type"] = "login";
             if (ModelState.IsValid)
             {
-                var user = await m_userManager.FindByNameAsync(username);
+                var user = await m_userManager.FindByNameAsync(UserName);
                 if (user != null)
                 {
                     await m_signInManager.SignOutAsync();
-                    Microsoft.AspNetCore.Identity.SignInResult result = await m_signInManager.PasswordSignInAsync(user, password, false, true);
+                    Microsoft.AspNetCore.Identity.SignInResult result = await m_signInManager.PasswordSignInAsync(user, Password, false, true);
                     if (result.Succeeded)
                         return Redirect(returnUrl);
                     ModelState.AddModelError("UserName", "Error. Username or Password is invalid");
