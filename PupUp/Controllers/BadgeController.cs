@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PupUp.Data;
 using PupUp.Models.Badges;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace PupUp.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class BadgeController : Controller
     {
         private readonly PupUpDbContext m_context;
