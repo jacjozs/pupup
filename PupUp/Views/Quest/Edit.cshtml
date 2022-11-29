@@ -65,12 +65,12 @@
             <span asp-validation-for="RewardType" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <div id="reward-num" class="non-active">
+            <div id="reward-num" class="@(Model.RewardType == 0 ? "non-active" : "")">
                 <label asp-for="RewardValue" class="control-label"></label>
-                <input type="number" asp-for="RewardValue" class="form-control" />
+                <input id="RewardValueNum" type="number" asp-for="RewardValue" class="form-control" />
                 <span asp-validation-for="RewardValue" class="text-danger"></span>
             </div>
-            <select id="badge-selector" multiple="true" class="form-control">
+            <select id="badge-selector" multiple="true" class="form-control @(Model.RewardType != 0 ? "non-active" : "")">
                 @foreach (var badge in badges)
                 {
                     <option value="@badge.Id" data-badge="">@badge.Name</option>

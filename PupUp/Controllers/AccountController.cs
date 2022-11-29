@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PupUp.Models.Identity;
+using PupUp.Services;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace PupUp.Controllers
@@ -11,10 +14,12 @@ namespace PupUp.Controllers
         private RoleManager<IdentityRole> m_roleManager;
         private UserManager<PupUpUser> m_userManager;
         private SignInManager<PupUpUser> m_signInManager;
-        public AccountController(UserManager<PupUpUser> userManager, SignInManager<PupUpUser> signInManager)
+        private UserService m_userService;
+        public AccountController(UserManager<PupUpUser> userManager, SignInManager<PupUpUser> signInManager, UserService userService)
         {
             m_userManager = userManager;
             m_signInManager = signInManager;
+            m_userService = userService;
         }
 
         public IActionResult Auth(string returnUrl)
@@ -33,10 +38,12 @@ namespace PupUp.Controllers
             if (ModelState.IsValid)
             {
                 user.EmailConfirmed = true;
+                user.ProfilImageUrl = UserService.DefaultProfilName;
                 IdentityResult result = await m_userManager.CreateAsync(user, user.Password);
                 if (result.Succeeded)
                 {
-                    result = await m_userManager.AddToRoleAsync(user, "user");
+                    await m_userManager.AddToRoleAsync(user, "user");
+                    result = await m_userManager.AddClaimAsync(user, new Claim(UserService.ClaimProfilName, UserService.DefaultProfilName));
                     if (!result.Succeeded)
                     {
                         Errors(result);
@@ -77,6 +84,16 @@ namespace PupUp.Controllers
             return View("Auth");
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken()]
+        public async Task<IActionResult> ChangeProfil(IFormFile newProfil)
+        {
+            if (newProfil != null)
+            {
+                await m_userService.SaveImage(User, newProfil);
+            }
+            return Redirect("/");
+        }
         [Authorize]
         public async Task<IActionResult> Logout()
         {

@@ -1,10 +1,12 @@
 ﻿using PupUp.Data;
+using PupUp.Helpers.Extensions;
 using PupUp.Models.Quests;
 using PupUp.Models.Quests.Enums;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 
 namespace PupUp.Services
 {
@@ -18,12 +20,14 @@ namespace PupUp.Services
         private readonly PupUpDbContext m_context;
         private readonly BadgeService m_badgeService;
         private readonly PointService m_pointService;
+        private readonly EventService m_eventService;
         private Dictionary<ActionType, ConcurrentBag<QuestPair>> m_questByAction = new Dictionary<ActionType, ConcurrentBag<QuestPair>>();
-        public QuestService(PupUpDbContext context, BadgeService badgeService, PointService pointService)
+        public QuestService(PupUpDbContext context, BadgeService badgeService, PointService pointService, EventService eventService)
         {
             m_context = context;
             m_badgeService = badgeService;
             m_pointService = pointService;
+            m_eventService = eventService;
             foreach (ActionType action in Enum.GetValues<ActionType>())
             {
                 m_questByAction.Add(action, new ConcurrentBag<QuestPair>());
@@ -48,10 +52,12 @@ namespace PupUp.Services
         }
         public IEnumerable<Quest> Quests => m_context.Quests;
         public ICollection<UserQuest> GetQuests(string userId) => m_context.UserQuests.Where(q => q.UserId == userId).ToList();
-        public async void DoAction(ActionType action, string userId, int? trainingId = null)
+        public async void DoAction(ActionType action, ClaimsPrincipal user, int? trainingId = null)
         {
             var quests = m_questByAction[action];
+            var userId = user.Claims.GetClaim(ClaimTypes.NameIdentifier);
             var userQuests = GetQuests(userId);
+            var training = trainingId.HasValue ? m_context.Trainings.Find(trainingId) : null;
             foreach (var pair in quests)
             {
                 switch (action)
@@ -98,6 +104,26 @@ namespace PupUp.Services
                             break;
                     }
                     #endregion
+
+                    string eventDesc = "";
+                    switch (action)
+                    {
+                        case ActionType.AddNewDog:
+                            eventDesc = $"{user.Claims.GetClaim(ClaimTypes.Name)} got a new dog!";
+                            break;
+                        case ActionType.StartTraining:
+                            eventDesc = $"{user.Claims.GetClaim(ClaimTypes.Name)} start learning {training.Name}!";
+                            break;
+                        case ActionType.LearnTraning:
+                            eventDesc = $"{user.Claims.GetClaim(ClaimTypes.Name)} learned {training.Name}!";
+                            break;
+                        case ActionType.SkillTraining:
+                            eventDesc = $"{user.Claims.GetClaim(ClaimTypes.Name)} got skill {training.Name}!";
+                            break;
+                        default:
+                            break;
+                    }
+                    m_eventService.AddEvent(userId, eventDesc);
 
                     foreach (var child in pair.Children)
                     {

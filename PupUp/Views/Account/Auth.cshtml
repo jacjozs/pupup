@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="~/css/site_auth.css" />
 }
 <div class="form">
-    <div class="col-12 text-danger text-center" asp-validation-summary="All"></div>
     <ul class="tab-group">
         <li class="tab @if(type == "login") @Html.Raw("active")"><a href="#login">Log In</a></li>
         <li class="tab @if(type == "signup") @Html.Raw("active")"><a href="#signup">Sign Up</a></li>
@@ -19,7 +18,7 @@
         <div id="login">
             <h1>Welcome Back!</h1>
 
-            <form asp-action="Validate" method="post">
+            <form asp-action="Validate">
                 <input type="hidden" name="returnUrl" value="@returnUrl" />
                 <div class="field-wrap">
                     <label>
@@ -37,13 +36,13 @@
 
                 <p class="forgot"><a href="#">Forgot Password?</a></p>
 
-                <button type="submit" class="button button-block" />Log In</button>
+                <button type="submit" class="button button-block">Log In</button>
 
             </form>
         </div>
         <div id="signup">
             <h1>Sign Up for Free</h1>
-            <form asp-action="CreateUser" method="post">
+            <form asp-action="CreateUser">
                 <input type="hidden" name="returnUrl" value="@returnUrl" />
                 <div class="field-wrap">
                     <label>
@@ -71,7 +70,7 @@
                     <input type="password" required autocomplete="off" asp-for="Password"/>
                 </div>
 
-                <button type="submit" class="button button-block" />Get Started</button>
+                <button type="submit" class="button button-block">Get Started</button>
 
             </form>
         </div>

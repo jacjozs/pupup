@@ -26,6 +26,7 @@ a:hover {
 
 header {
     width: 100%;
+    box-shadow: 0 6px 26px 6px rgb(0 0 0 / 25%);
 }
 
 header,
@@ -291,6 +292,16 @@ nav.info-side {
 
 .social-icons a.dribbble:hover {
     background-color: #ea4c89
+}
+
+
+
+.profil-img {
+    border-radius: 50%;
+    -o-object-fit: cover;
+    object-fit: cover;
+    width: 40px;
+    height: 40px;
 }
 
 @media (max-width:767px) {

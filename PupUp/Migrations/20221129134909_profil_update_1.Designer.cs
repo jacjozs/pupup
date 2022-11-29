@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PupUp.Data;
 
@@ -10,9 +11,10 @@ using PupUp.Data;
 namespace PupUp.Migrations
 {
     [DbContext(typeof(PupUpDbContext))]
-    partial class PupUpDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221129134909_profil_update_1")]
+    partial class profil_update_1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.11");
@@ -318,9 +320,6 @@ namespace PupUp.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("ProfilImageUrl")
-                        .HasColumnType("TEXT");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("TEXT");

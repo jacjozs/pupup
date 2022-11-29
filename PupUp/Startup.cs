@@ -70,10 +70,12 @@ namespace PupUp
                 options.AccessDeniedPath = "/Denied";
                 options.SlidingExpiration = true;
             });
+            services.AddScoped<UserService>();
             services.AddScoped<TrainingService>();
             services.AddScoped<QuestService>();
             services.AddScoped<BadgeService>();
             services.AddScoped<PointService>();
+            services.AddScoped<EventService>();
             services.AddControllersWithViews();
             services.AddRazorPages();
         }

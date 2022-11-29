@@ -14,7 +14,7 @@
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light box-shadow mb-3">
             <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
                 <img class="navbar-logo" src="~/images/pupup_logo_fekvo.png" alt="PupUp" title="Home" />
             </a>
@@ -26,6 +26,9 @@
                 <ul class="navbar-nav flex-grow-1">
                     @if (User.Identity.IsAuthenticated)
                     {
+                        <li class="nav-item">
+                            <img class="profil-img" src="@("~/images/profils/" + User.Claims.GetClaim(UserService.ClaimProfilName))" asp-append-version="true" alt="profile image">
+                        </li>
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item @ViewData["Admin"]">

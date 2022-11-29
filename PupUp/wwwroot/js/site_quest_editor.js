@@ -28,6 +28,9 @@ $("#badge-selector").select2({
 $('#badge-selector').change(function () {
     $("#RewardValue").val($(this).val().join(':'));
 });
+$("#RewardValueNum").on("change", function () {
+    $("#RewardValue").val($(this).val());
+});
 $("#reward-type").on('change', function () {
     if ($(this).val() == 0) {
         $("#badge-selector").removeClass("non-active");

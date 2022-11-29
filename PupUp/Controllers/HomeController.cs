@@ -40,6 +40,7 @@ namespace PupUp.Controllers
             ViewData["Badges"] = m_dbContext.Badges.ToList();
             ViewData["UserQuests"] = m_dbContext.UserQuests.Where(d => d.UserId == User.Claims.GetClaim(ClaimTypes.NameIdentifier)).ToList();
             ViewData["UserBadges"] = m_dbContext.UserBadges.Where(d => d.UserId == User.Claims.GetClaim(ClaimTypes.NameIdentifier)).ToList();
+            ViewData["Events"] = m_dbContext.Events.Include(e => e.User).Where(d => d.UserId != User.Claims.GetClaim(ClaimTypes.NameIdentifier)).ToList();
             ViewData["Coin"] = m_dbContext.Points.FirstOrDefault(d => d.UserId == User.Claims.GetClaim(ClaimTypes.NameIdentifier))?.Coin ?? 0;
             return View();
         }

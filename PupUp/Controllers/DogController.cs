@@ -19,11 +19,13 @@ namespace PupUp.Controllers
         private readonly PupUpDbContext m_dbContext;
         private readonly TrainingService m_service;
         private readonly QuestService m_questService;
-        public DogController(PupUpDbContext dbContext, TrainingService service, QuestService questServie)
+        private readonly EventService m_eventService;
+        public DogController(PupUpDbContext dbContext, TrainingService service, QuestService questServie, EventService eventService)
         {
             m_dbContext = dbContext;
             m_service = service;
             m_questService = questServie;
+            m_eventService = eventService;
         }
         public async Task<IActionResult> Index()
         {
@@ -48,7 +50,7 @@ namespace PupUp.Controllers
                 dog.UserId = User.Claims.GetClaim(ClaimTypes.NameIdentifier);
                 m_dbContext.Dogs.Add(dog);
                 await m_dbContext.SaveChangesAsync();
-                m_questService.DoAction(ActionType.AddNewDog, dog.UserId);
+                m_questService.DoAction(ActionType.AddNewDog, User);
                 return RedirectToAction("Profil", "Home");
             }
             return RedirectToAction("Profil", "Home");
@@ -84,13 +86,13 @@ namespace PupUp.Controllers
             {
                 case Models.Trainings.Enums.TrainingState.NotLearned:
                 case Models.Trainings.Enums.TrainingState.InProgress:
-                    m_questService.DoAction(ActionType.StartTraining, User.Claims.GetClaim(ClaimTypes.NameIdentifier));
+                    m_questService.DoAction(ActionType.StartTraining, User, newState.TrainingId);
                     break;
                 case Models.Trainings.Enums.TrainingState.Learned:
-                    m_questService.DoAction(ActionType.LearnTraning, User.Claims.GetClaim(ClaimTypes.NameIdentifier));
+                    m_questService.DoAction(ActionType.LearnTraning, User, newState.TrainingId);
                     break;
                 case Models.Trainings.Enums.TrainingState.Skill:
-                    m_questService.DoAction(ActionType.SkillTraining, User.Claims.GetClaim(ClaimTypes.NameIdentifier));
+                    m_questService.DoAction(ActionType.SkillTraining, User, newState.TrainingId);
                     break;
                 default:
                     break;

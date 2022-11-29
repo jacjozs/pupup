@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using PupUp.Helpers.Attributes;
 using PupUp.Models.Dogs;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace PupUp.Models.Identity
 {
@@ -22,6 +21,7 @@ namespace PupUp.Models.Identity
         [Required]
         [EmailUserUnique]
         public override string Email { get; set; }
+        public string ProfilImageUrl { get; set; }
         public Points Points { get; set; }
         public List<Dog> Dogs { get; set; } = new List<Dog>();
     }

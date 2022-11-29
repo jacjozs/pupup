@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using PupUp.Models;
 using PupUp.Models.Badges;
 using PupUp.Models.Dogs;
+using PupUp.Models.Events;
 using PupUp.Models.Identity;
 using PupUp.Models.Quests;
 using PupUp.Models.Trainings;
@@ -21,6 +22,7 @@ namespace PupUp.Data
         public DbSet<Badge> Badges { get; set; }
         public DbSet<UserBadge> UserBadges { get; set; }
         public DbSet<Points> Points { get; set; }
+        public DbSet<PupUpEvent> Events { get; set; }
         public PupUpDbContext(DbContextOptions<PupUpDbContext> options) : base(options)
         {
         }
@@ -48,6 +50,7 @@ namespace PupUp.Data
             builder.Entity<UserBadge>().HasOne(s => s.User).WithMany();
 
             builder.Entity<Points>().HasOne(s => s.User).WithOne(u => u.Points);
+            builder.Entity<PupUpEvent>().HasOne(s => s.User).WithMany();
 
 
             builder.Entity<IdentityRole>(entity =>
