@@ -1,0 +1,50 @@
+﻿@model PupUp.Models.Dogs.Dog
+@using PupUp.Models.Dogs.Enums
+@{
+    ViewData["Title"] = "Edit";
+    var trainingId = ViewData["TrainingId"];
+}
+@section Styles {
+<link rel="stylesheet" href="~/css/site_editor.css" />
+}
+<div class="editor col-12 col-sm-6 col-md-4">
+    <h1>Create</h1>
+
+    <h4>Dog</h4>
+    <hr />
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Type" class="control-label"></label>
+            <select asp-for="Type" asp-items="Html.GetEnumSelectList<DogType>()" class="form-control">
+                <option selected="selected" value="">Please select</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label asp-for="Gender" class="control-label"></label>
+            <select asp-for="Gender" asp-items="Html.GetEnumSelectList<DogGender>()" class="form-control">
+                <option selected="selected" value="">Please select</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label asp-for="Age" class="control-label"></label>
+            <input asp-for="Age" class="form-control" />
+            <span asp-validation-for="Age" class="text-danger"></span>
+        </div>
+        <div class="form-group editor-line">
+            <a asp-action="Index">Back to List</a>
+            <input type="submit" value="Create" class="btn" style="color: var(--green); font-weight: bold;" />
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+}

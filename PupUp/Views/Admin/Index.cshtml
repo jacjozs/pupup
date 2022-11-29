@@ -1,0 +1,51 @@
+﻿@{
+    ViewData["Title"] = "Services Page";
+    ViewData["Services"] = "nav-active";
+}
+@section Styles {
+<link rel="stylesheet" href="~/css/site_admin.css" />
+}
+<section id="service">
+   <div class="row">
+     <div class="admin-tab col-md-6 col-lg-4 col-sm-12">
+      <a asp-controller="Training" asp-action="Index" class="single_service">
+       <div class="single_service-body">
+        <div class="icon">
+          <i class="fa fa-laptop"></i>
+        </div>
+         <h4 class="single_service-heading">Tranings</h4>
+       </div>
+      </a>
+     </div>
+     <div class="admin-tab col-md-6 col-lg-4 col-sm-12">
+      <a asp-controller="TrainingStep" asp-action="Index" class="single_service">
+       <div class="single_service-body">
+        <div class="icon">
+          <i class="fa fa-laptop"></i>
+        </div>
+         <h4 class="single_service-heading">Tranings steps</h4>
+       </div>
+      </a>
+     </div>
+     <div class="admin-tab col-md-6 col-lg-4 col-sm-12">
+      <a asp-controller="Quest" asp-action="Index" class="single_service">
+       <div class="single_service-body">
+        <div class="icon">
+          <i class="fa fa-laptop"></i>
+        </div>
+         <h4 class="single_service-heading">Quests</h4>
+       </div>
+      </a>
+     </div>
+     <div class="admin-tab col-md-6 col-lg-4 col-sm-12">
+      <a asp-controller="Badge" asp-action="Index" class="single_service">
+       <div class="single_service-body">
+        <div class="icon">
+          <i class="fa fa-laptop"></i>
+        </div>
+         <h4 class="single_service-heading">Badges</h4>
+       </div>
+      </a>
+     </div>
+   </div>
+ </section>

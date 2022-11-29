@@ -1,0 +1,93 @@
+﻿@using PupUp.Models.Quests.Enums
+@model PupUp.Models.Quests.Quest
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var quests = ViewData["Quests"] as IEnumerable<PupUp.Models.Quests.Quest>;
+    var trainings = ViewData["Trainings"] as IEnumerable<PupUp.Models.Trainings.Training>;
+    var badges = ViewData["Badges"] as IEnumerable<PupUp.Models.Badges.Badge>;
+}
+@section Styles {
+<link rel="stylesheet" href="~/css/site_editor.css" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/css/select2.min.css" rel="stylesheet" />
+}
+<div class="editor col-12 col-sm-6 col-md-4">
+    <h1>Edit</h1>
+
+    <h4>Quest</h4>
+    <hr />
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <input id="RequiredQuests" asp-for="RequiredQuests" type="hidden" />
+        <input id="TrainingIds" asp-for="TrainingIds" type="hidden" />
+        <input id="RewardValue" asp-for="RewardValue" type="hidden" />
+        <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Description" class="control-label"></label>
+            <input asp-for="Description" class="form-control" />
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <select id="quest-selector" multiple="true" class="form-control">
+                @foreach (var quest in quests)
+                {
+                    <option value="@quest.Id" data-badge="">@quest.Name</option>
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <select id="training-selector" multiple="true" class="form-control">
+                @foreach (var training in trainings)
+                {
+                    <option value="@training.Id" data-badge="">@training.Name</option>
+                }
+            </select>
+        </div>
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" asp-for="Repetable" /> @Html.DisplayNameFor(model => model.Repetable)
+            </label>
+        </div>
+        <div class="form-group">
+            <label asp-for="ActionType" class="control-label"></label>
+            <select asp-for="ActionType" asp-items="Html.GetEnumSelectList<ActionType>()" class="form-control"></select>
+            <span asp-validation-for="ActionType" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="RewardType" class="control-label"></label>
+            <select asp-for="RewardType" asp-items="Html.GetEnumSelectList<RewardType>()" class="form-control"></select>
+            <span asp-validation-for="RewardType" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <div id="reward-num" class="non-active">
+                <label asp-for="RewardValue" class="control-label"></label>
+                <input type="number" asp-for="RewardValue" class="form-control" />
+                <span asp-validation-for="RewardValue" class="text-danger"></span>
+            </div>
+            <select id="badge-selector" multiple="true" class="form-control">
+                @foreach (var badge in badges)
+                {
+                    <option value="@badge.Id" data-badge="">@badge.Name</option>
+                }
+            </select>
+        </div>
+        <div class="form-group editor-line">
+            <a asp-action="Index">Back to List</a>
+            <input type="submit" value="Save" class="btn" style="color: var(--green); font-weight: bold;" />
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/js/select2.min.js"></script>
+<script src="~/js/site_quest_editor.js"></script>
+}

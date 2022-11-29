@@ -1,0 +1,49 @@
+﻿@model IEnumerable<PupUp.Models.Trainings.TrainingStep>
+@{
+    ViewData["Title"] = "Index";
+}
+@section Styles {
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css"/>
+<link rel="stylesheet" href="~/css/site_trainings.css" />
+}
+<div id="demo" class="col-12 col-sm-8">
+  <h1>Dog Trainings</h1>
+  
+  <!-- Responsive table starts here -->
+  <!-- For correct display on small screens you must add 'data-title' to each 'td' in your table -->
+  <div class="table-responsive-vertical">
+      
+  <!-- Table starts here -->
+  <table id="table" class="table table-hover table-mc-light-blue">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Index</th>
+          <th>Description</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+          @{
+              foreach (var training in Model)
+              {
+                 <tr>
+                  <td data-title="Id">@training.Id</td>
+                  <td data-title="Index">@training.Index</td>
+                  <td data-title="Description">@training.Description</td>
+                  <td data-title="Edit">
+                    <a asp-action="Edit" asp-route-id="@training.Id">Edit</a>
+                  </td>
+                </tr>
+              }
+          }
+      </tbody>
+    </table>
+  </div>
+</div>
+@section Scripts {
+    
+<script src='https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js'></script>
+<script src='https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js'></script>
+<script src='~/js/site_trainings.js'></script>
+}

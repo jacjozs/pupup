@@ -1,0 +1,302 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+:root {
+    --black: #0c1216;
+    --grayblack: #282D35;
+    --purple: #8968AA;
+    --yellow: #FBBB21;
+    --turquise: #009CA0;
+    --green: #7CC5AD;
+    --red:#d28335;
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+
+a,
+a:hover {
+    font-weight: bold;
+    color: var(--green);
+    text-decoration: none;
+}
+
+
+header {
+    width: 100%;
+}
+
+header,
+nav {
+    position: sticky;
+}
+
+body {
+    font-family: "Montserrat", sans-serif;
+    background-image: url("/images/hatter_minta_20.png");
+    background-color: var(--green) !important;
+    background-repeat: repeat;
+}
+
+nav.info-side {
+    display: none;
+}
+
+@media (min-width: 992px) {
+    nav.info-side {
+        display: flex;
+        z-index: 1;
+        padding: .5rem 1rem;
+        background-color: var(--black);
+        color: var(--green);
+        margin: 0;
+    }
+
+    .info-social {
+        display: inline-flex;
+        margin-bottom: 0;
+        justify-content: space-around;
+    }
+
+    .info-social li {
+        font-size: small;
+        font-weight: bold;
+        background-color: var(--grayblack);
+        transition-duration: 0.6s;
+        transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .info-contacts {
+        display: inline-flex;
+        justify-content: flex-end;
+        margin-bottom: 0;
+    }
+
+    .info-contact {
+        margin-left: 1rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .icon {
+        display: inline-flex;
+        font-style: normal;
+        font-variant: normal;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    .icon::before {
+        color: var(--green);
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+        margin-right: 10px;
+    }
+
+    #info-call::before {
+        content: "\f095";
+    }
+
+    #info-mail::before {
+        content: "\f0ac";
+    }
+}
+
+.navbar {
+    background-color: var(--grayblack);
+    font-size: large;
+}
+
+.navbar-logo {
+    height: 4rem;
+}
+
+.navbar-nav {
+    justify-content: flex-end;
+}
+
+.nav-item {
+    margin-right: 1rem;
+}
+
+.nav-link {
+    font-size: large;
+    color: var(--green) !important;
+}
+
+.nav-active {
+    display: inline-block;
+    position: relative;
+}
+
+.nav-active:after {
+    position: absolute;
+    content: '';
+    border-bottom: 10px solid var(--yellow);
+    width: 100%;
+    transform: translateX(-50%);
+    bottom: -24px;
+    left: 50%;
+}
+
+.site-footer {
+    background-color: var(--grayblack);
+    padding: 20px 0 20px;
+    font-size: 15px;
+    line-height: 24px;
+    color: var(--green);
+}
+
+.site-footer hr {
+    border-top-color: #bbb;
+    opacity: 0.5
+}
+
+.site-footer hr.small {
+    margin: 20px 0
+}
+
+.site-footer h6 {
+    color: #fff;
+    font-size: 16px;
+    text-transform: uppercase;
+    margin-top: 5px;
+    letter-spacing: 2px
+}
+
+.site-footer a {
+    color: #737373;
+}
+
+.site-footer a:hover {
+    color: #3366cc;
+    text-decoration: none;
+}
+
+.footer-contacts {
+    padding-left: 0;
+    list-style: none
+}
+
+.footer-contacts li {
+    display: block
+}
+.footer-contacts.inline li {
+    display: inline-block
+}
+
+.site-footer .social-icons {
+    text-align: right
+}
+
+.site-footer .social-icons a {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    margin-left: 6px;
+    margin-right: 0;
+    border-radius: 100%;
+    background-color: #33353d
+}
+
+.copyright-text {
+    margin: 0
+}
+
+@media (max-width:991px) {
+    .site-footer [class^=col-] {
+        margin-bottom: 30px
+    }
+}
+
+@media (max-width:767px) {
+    .site-footer {
+        padding-bottom: 0
+    }
+
+    .site-footer .copyright-text,
+    .site-footer .social-icons {
+        text-align: center
+    }
+}
+
+.social-icons {
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none
+}
+
+.social-icons li {
+    display: inline-block;
+    margin-bottom: 4px
+}
+
+.social-icons li.title {
+    margin-right: 15px;
+    text-transform: uppercase;
+    color: #96a2b2;
+    font-weight: 700;
+    font-size: 13px
+}
+
+.social-icons a {
+    background-color: #eceeef;
+    color: #818a91;
+    font-size: 16px;
+    display: inline-block;
+    line-height: 44px;
+    width: 44px;
+    height: 44px;
+    text-align: center;
+    margin-right: 8px;
+    border-radius: 100%;
+    -webkit-transition: all .2s linear;
+    -o-transition: all .2s linear;
+    transition: all .2s linear
+}
+
+.social-icons a:active,
+.social-icons a:focus,
+.social-icons a:hover {
+    color: #fff;
+    background-color: #29aafe
+}
+
+.social-icons.size-sm a {
+    line-height: 34px;
+    height: 34px;
+    width: 34px;
+    font-size: 14px
+}
+
+.social-icons a.facebook:hover {
+    background-color: #3b5998
+}
+
+.social-icons a.twitter:hover {
+    background-color: #00aced
+}
+
+.social-icons a.linkedin:hover {
+    background-color: #007bb6
+}
+
+.social-icons a.dribbble:hover {
+    background-color: #ea4c89
+}
+
+@media (max-width:767px) {
+    .social-icons li.title {
+        display: block;
+        margin-right: 0;
+        font-weight: 600
+    }
+}

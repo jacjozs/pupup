@@ -1,0 +1,32 @@
+﻿@model IEnumerable<PupUp.Models.Trainings.TrainingStep>
+@{
+    ViewData["Title"] = "Home Page";
+}
+@section Styles {
+<link rel="stylesheet" href="~/css/site_steps.css" />
+<link rel="stylesheet" href="~/css/site_editor.css" />
+}
+<div class="editor col-12 col-sm-6 col-md-4">
+    <h1>Edit</h1>
+
+    <h4>Training Step position</h4>
+    <hr />
+    <form asp-action="Steps" method="post">
+        <input type="hidden" id="ItemPair" name="ItemPair" />
+        <ul id="items-list" class="moveable">
+            @{
+                foreach (var step in Model)
+                {
+                    <li id="@step.Id" tabindex="@(step.Index - 1)">@step.Description</li>
+                }
+            }
+        </ul>
+        <div class="form-group editor-line">
+            <a asp-action="Index">Back to List</a>
+            <input type="submit" value="Save" class="btn" style="color: var(--green); font-weight: bold;" />
+        </div>
+    </form>
+</div>
+@section Scripts {
+<script src='~/js/site_steps.js'></script>
+}
