@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PupUp.Data;
 
@@ -10,9 +11,10 @@ using PupUp.Data;
 namespace PupUp.Migrations
 {
     [DbContext(typeof(PupUpDbContext))]
-    partial class PupUpDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221201112406_dog_states")]
+    partial class dog_states
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.11");
@@ -188,7 +190,7 @@ namespace PupUp.Migrations
                     b.ToTable("Badges");
                 });
 
-            modelBuilder.Entity("PupUp.Models.Badges.DogBadge", b =>
+            modelBuilder.Entity("PupUp.Models.Badges.DogBadget", b =>
                 {
                     b.Property<int>("BadgeId")
                         .HasColumnType("INTEGER");
@@ -548,7 +550,7 @@ namespace PupUp.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PupUp.Models.Badges.DogBadge", b =>
+            modelBuilder.Entity("PupUp.Models.Badges.DogBadget", b =>
                 {
                     b.HasOne("PupUp.Models.Badges.Badge", "Badge")
                         .WithMany()
@@ -557,7 +559,7 @@ namespace PupUp.Migrations
                         .IsRequired();
 
                     b.HasOne("PupUp.Models.Dogs.Dog", "Dog")
-                        .WithMany("Badges")
+                        .WithMany()
                         .HasForeignKey("DogId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -687,8 +689,6 @@ namespace PupUp.Migrations
 
             modelBuilder.Entity("PupUp.Models.Dogs.Dog", b =>
                 {
-                    b.Navigation("Badges");
-
                     b.Navigation("TrainingStates");
                 });
 

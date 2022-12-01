@@ -52,11 +52,14 @@ namespace PupUp.Services
         }
         public IEnumerable<Quest> Quests => m_context.Quests;
         public ICollection<UserQuest> GetQuests(string userId) => m_context.UserQuests.Where(q => q.UserId == userId).ToList();
-        public async void DoAction(ActionType action, ClaimsPrincipal user, int? trainingId = null)
+        public ICollection<DogQuest> GetQuests(int? dogId) => dogId.HasValue ? m_context.DogQuests.Where(q => q.DogId == dogId).ToList() : new List<DogQuest>();
+        public async void DoAction(ActionType action, ClaimsPrincipal user, int? trainingId = null, int? dogId = null)
         {
             var quests = m_questByAction[action];
             var userId = user.Claims.GetClaim(ClaimTypes.NameIdentifier);
+            var dog = dogId.HasValue ? m_context.Dogs.Find(dogId) : null;
             var userQuests = GetQuests(userId);
+            var dogQuests = GetQuests(dogId);
             var training = trainingId.HasValue ? m_context.Trainings.Find(trainingId) : null;
             foreach (var pair in quests)
             {
@@ -76,9 +79,10 @@ namespace PupUp.Services
                     continue;
 
                 var userQuest = userQuests.FirstOrDefault(q => q.QuestId == pair.Quest.Id);
-                if (userQuest == null || pair.Quest.Repetable)
+                var dogQuest = dogQuests.FirstOrDefault(q => q.QuestId == pair.Quest.Id);
+                if (userQuest == null || dogQuest == null || pair.Quest.Repetable)
                 {
-                    if (userQuest == null)
+                    if (userQuest == null && pair.Quest.UserQuest)
                         m_context.UserQuests.Add(userQuest = new UserQuest()
                         {
                             QuestId = pair.Quest.Id,
@@ -86,19 +90,36 @@ namespace PupUp.Services
                             UserId = userId
                         });
 
-                    userQuest.State = QuestState.Completed;
+                    if (dogQuest == null && !pair.Quest.UserQuest)
+                    {
+                        m_context.DogQuests.Add(dogQuest = new DogQuest()
+                        {
+                            QuestId = pair.Quest.Id,
+                            Quest = pair.Quest,
+                            DogId = dogId.Value
+                        });
+                    }
+                    if (userQuest!= null)
+                        userQuest.State = QuestState.Completed;
+                    if (dogQuest != null)
+                        dogQuest.State = QuestState.Completed;
 
                     #region Reward
                     switch (pair.Quest.RewardType)
                     {
                         case RewardType.Badget:
-                            m_badgeService.AddBadges(pair.Quest.RewardIds, userId);
+                            if (pair.Quest.UserQuest)
+                                m_badgeService.AddBadges(pair.Quest.RewardIds, userId);
+                            else
+                                m_badgeService.AddDogBadges(pair.Quest.RewardIds, dogId.Value);
                             break;
                         case RewardType.Exp:
-                            m_pointService.AddExp(userId, pair.Quest.RewardNum);
+                            if (pair.Quest.UserQuest)
+                                m_pointService.AddExp(userId, pair.Quest.RewardNum);
                             break;
                         case RewardType.Coin:
-                            m_pointService.AddCoin(userId, pair.Quest.RewardNum);
+                            if (pair.Quest.UserQuest)
+                                m_pointService.AddCoin(userId, pair.Quest.RewardNum);
                             break;
                         default:
                             break;
@@ -112,13 +133,13 @@ namespace PupUp.Services
                             eventDesc = $"{user.Claims.GetClaim(ClaimTypes.Name)} got a new dog!";
                             break;
                         case ActionType.StartTraining:
-                            eventDesc = $"{user.Claims.GetClaim(ClaimTypes.Name)} start learning {training.Name}!";
+                            eventDesc = $"{user.Claims.GetClaim(ClaimTypes.Name)} start learning {training.Name} with {dog.Name}!";
                             break;
                         case ActionType.LearnTraning:
-                            eventDesc = $"{user.Claims.GetClaim(ClaimTypes.Name)} learned {training.Name}!";
+                            eventDesc = $"{user.Claims.GetClaim(ClaimTypes.Name)} learned {training.Name} with {dog.Name}!";
                             break;
                         case ActionType.SkillTraining:
-                            eventDesc = $"{user.Claims.GetClaim(ClaimTypes.Name)} got skill {training.Name}!";
+                            eventDesc = $"{user.Claims.GetClaim(ClaimTypes.Name)} got skill {training.Name} with {dog.Name}!";
                             break;
                         default:
                             break;
@@ -137,6 +158,19 @@ namespace PupUp.Services
                                     QuestId = child.Id,
                                     State = QuestState.Progress,
                                     UserId = userId
+                                });
+                            }
+                        }
+                        if (child.RequiredQuestIds.All(id => dogQuests.Any(q => q.QuestId == id)))
+                        {
+                            if (!m_context.DogQuests.Any(q => q.DogId == dogId.Value && q.QuestId == child.Id))
+                            {
+                                m_context.DogQuests.Add(new DogQuest()
+                                {
+                                    Quest = child,
+                                    QuestId = child.Id,
+                                    State = QuestState.Progress,
+                                    DogId = dogId.Value
                                 });
                             }
                         }

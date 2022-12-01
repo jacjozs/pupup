@@ -35,6 +35,10 @@ namespace PupUp.Controllers
         public async Task<IActionResult> Dog(int id)
         {
             var dog = await m_dbContext.Dogs.Include(d => d.TrainingStates).ThenInclude(c => c.Training).FirstOrDefaultAsync(d => d.Id == id);
+            ViewData["Quests"] = m_dbContext.Quests.Where(q => !q.UserQuest).ToList();
+            ViewData["Badges"] = m_dbContext.Badges.Where(b => !b.UserBadge).ToList();
+            ViewData["DogQuests"] = m_dbContext.DogQuests.Where(d => d.DogId == dog.Id).ToList();
+            ViewData["DogBadges"] = m_dbContext.DogBadges.Where(d => d.DogId == dog.Id).ToList();
             ViewData["Events"] = m_dbContext.Events.Include(e => e.User).Where(d => d.UserId != User.Claims.GetClaim(ClaimTypes.NameIdentifier)).ToList();
             return View(dog);
         }
@@ -51,7 +55,7 @@ namespace PupUp.Controllers
                 dog.UserId = User.Claims.GetClaim(ClaimTypes.NameIdentifier);
                 m_dbContext.Dogs.Add(dog);
                 await m_dbContext.SaveChangesAsync();
-                m_questService.DoAction(ActionType.AddNewDog, User);
+                m_questService.DoAction(ActionType.AddNewDog, User, null, dog.Id);
                 return RedirectToAction("Profil", "Home");
             }
             return RedirectToAction("Profil", "Home");
@@ -87,13 +91,13 @@ namespace PupUp.Controllers
             {
                 case Models.Trainings.Enums.TrainingState.NotLearned:
                 case Models.Trainings.Enums.TrainingState.InProgress:
-                    m_questService.DoAction(ActionType.StartTraining, User, newState.TrainingId);
+                    m_questService.DoAction(ActionType.StartTraining, User, newState.TrainingId, newState.DogId);
                     break;
                 case Models.Trainings.Enums.TrainingState.Learned:
-                    m_questService.DoAction(ActionType.LearnTraning, User, newState.TrainingId);
+                    m_questService.DoAction(ActionType.LearnTraning, User, newState.TrainingId, newState.DogId);
                     break;
                 case Models.Trainings.Enums.TrainingState.Skill:
-                    m_questService.DoAction(ActionType.SkillTraining, User, newState.TrainingId);
+                    m_questService.DoAction(ActionType.SkillTraining, User, newState.TrainingId, newState.DogId);
                     break;
                 default:
                     break;

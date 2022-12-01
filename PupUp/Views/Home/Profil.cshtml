@@ -91,6 +91,12 @@
                                                 <p class="box-progress-percentage">@percent%</p>
                                             </div>
                                             <div class="project-box-footer">
+                                                 <div class="participants">
+                                                    @foreach (var badge in dog.Badges)
+                                                   {
+                                                       <img src="@("~/images/badges/" + badge.Badge.ImageUrl)" asp-append-version="true" alt="@badge.Badge.Name" />
+                                                   }
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -210,7 +216,7 @@
                                                 </div>
                                             </div>
                                             <div class="project-box-content-header">
-                                                <img src="@("~/images/badges/" + badge.ImageUrl)" asp-append-version="true" alt="badge" />
+                                                <img src="@("~/images/badges/" + badge.ImageUrl)" asp-append-version="true" alt="@badge.Name" />
                                             </div>
                                             <div class="project-box-footer">
                                             </div>

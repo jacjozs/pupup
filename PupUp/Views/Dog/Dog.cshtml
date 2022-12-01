@@ -5,6 +5,11 @@
 @{
     ViewData["Title"] = "Dogs Page";
     ViewData["Profil"] = "nav-active";
+    var quests = ViewData["Quests"] as IEnumerable<PupUp.Models.Quests.Quest>;
+    var badges = ViewData["Badges"] as IEnumerable<PupUp.Models.Badges.Badge>;
+    var dogQuests = ViewData["DogQuests"] as IEnumerable<PupUp.Models.Quests.DogQuest>;
+    var dogBadges = ViewData["DogBadges"] as IEnumerable<PupUp.Models.Badges.DogBadge>;
+
     var events = ViewData["Events"] as IEnumerable<PupUp.Models.Events.PupUpEvent>;
 }
 @section Styles {
@@ -20,84 +25,215 @@
             </svg>
         </button>
         <div class="projects-section">
-            <div class="projects-section-header">
-                <p>Tranings</p>
-            </div>
-            <div class="projects-section-line">
-                <div class="projects-status">
-                    <div class="item-status">
-                        <span class="status-number">@traningService.GetTrainingNotLearnedCount(Model.Id)</span>
-                        <span class="status-type">Not learned</span>
-                    </div>
-                    <div class="item-status">
-                        <span class="status-number">@traningService.GetTrainingStateCount(Model.Id, TrainingState.InProgress)</span>
-                        <span class="status-type">In Progress</span>
-                    </div>
-                    <div class="item-status">
-                        <span class="status-number">@traningService.GetTrainingStateCount(Model.Id, TrainingState.Learned)</span>
-                        <span class="status-type">Learned</span>
-                    </div>
-                    <div class="item-status">
-                        <span class="status-number">@traningService.GetTrainingStateCount(Model.Id, TrainingState.Skill)</span>
-                        <span class="status-type">Skill</span>
-                    </div>
-                </div>
-                <div class="view-actions">
-                    <button class="view-btn list-view-1" title="List View">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list">
-                            <line x1="8" y1="6" x2="21" y2="6" />
-                            <line x1="8" y1="12" x2="21" y2="12" />
-                            <line x1="8" y1="18" x2="21" y2="18" />
-                            <line x1="3" y1="6" x2="3.01" y2="6" />
-                            <line x1="3" y1="12" x2="3.01" y2="12" />
-                            <line x1="3" y1="18" x2="3.01" y2="18" />
-                        </svg>
-                    </button>
-                    <button class="view-btn grid-view-1 active" title="Grid View">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-grid">
-                            <rect x="3" y="3" width="7" height="7" />
-                            <rect x="14" y="3" width="7" height="7" />
-                            <rect x="14" y="14" width="7" height="7" />
-                            <rect x="3" y="14" width="7" height="7" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-            <div class="project-boxes box-1 jsGridView">
-                @{
-                    foreach (var traning in traningService.Trainings)
-                    {
-                        var state = Model.TrainingStates.FirstOrDefault(s => s.TrainingId == traning.Id);
-                        TrainingState stateType = state?.State ?? TrainingState.NotLearned;
-                        <div class="project-box-wrapper">
-                            <div class="project-box" style="background-color: @stateType.GetColor();">
-                                <div class="project-box-header">
-                                    @if (state != null)
-                                    {
-                                        <span>@Html.DisplayFor(model => state.UpdateTime);</span>
-                                        <div class="more-wrapper">
-                                            <i class="project-btn-more fa-solid fa-graduation-cap">
-                                            </i>
-                                        </div>
-                                    }
+            <div class="tabs">
+                <div class="tab-3">
+                    <label for="tab3-1">Dogs</label>
+                    <input id="tab3-1" name="tabs-three" type="radio" checked="checked">
+                    <div>
+                        <div class="projects-section-header">
+                            <p>Tranings</p>
+                        </div>
+                        <div class="projects-section-line">
+                            <div class="projects-status">
+                                <div class="item-status">
+                                    <span class="status-number">@traningService.GetTrainingNotLearnedCount(Model.Id)</span>
+                                    <span class="status-type">Not learned</span>
                                 </div>
-                                <div class="project-box-content-header">
-                                    <a asp-action="Training" asp-route-id="@traning.Id" asp-route-dog="@Model.Id" class="box-content-header">@Html.DisplayFor(model => traning.Name)</a>
-                                    <p class="box-content-subheader">@Html.DisplayFor(model => traning.Description)</p>
+                                <div class="item-status">
+                                    <span class="status-number">@traningService.GetTrainingStateCount(Model.Id, TrainingState.InProgress)</span>
+                                    <span class="status-type">In Progress</span>
                                 </div>
-                                <div class="box-progress-wrapper">
-                                    <p class="box-progress-header">Status: @Html.DisplayFor(model => stateType)</p>
-                                    <div class="box-progress-bar">
-                                        <span class="box-progress" style="width: @stateType.GetPercent()%; background-color: var(--turquise)"></span>
-                                    </div>
-                                    <p class="box-progress-percentage">@stateType.GetPercent()%</p>
+                                <div class="item-status">
+                                    <span class="status-number">@traningService.GetTrainingStateCount(Model.Id, TrainingState.Learned)</span>
+                                    <span class="status-type">Learned</span>
                                 </div>
-                                <div class="project-box-footer">
+                                <div class="item-status">
+                                    <span class="status-number">@traningService.GetTrainingStateCount(Model.Id, TrainingState.Skill)</span>
+                                    <span class="status-type">Skill</span>
                                 </div>
                             </div>
+                            <div class="view-actions">
+                                <button class="view-btn list-view-1" title="List View">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list">
+                                        <line x1="8" y1="6" x2="21" y2="6" />
+                                        <line x1="8" y1="12" x2="21" y2="12" />
+                                        <line x1="8" y1="18" x2="21" y2="18" />
+                                        <line x1="3" y1="6" x2="3.01" y2="6" />
+                                        <line x1="3" y1="12" x2="3.01" y2="12" />
+                                        <line x1="3" y1="18" x2="3.01" y2="18" />
+                                    </svg>
+                                </button>
+                                <button class="view-btn grid-view-1 active" title="Grid View">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-grid">
+                                        <rect x="3" y="3" width="7" height="7" />
+                                        <rect x="14" y="3" width="7" height="7" />
+                                        <rect x="14" y="14" width="7" height="7" />
+                                        <rect x="3" y="14" width="7" height="7" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
-                    }
-                }
+                        <div class="project-boxes box-1 jsGridView">
+                            @{
+                                foreach (var traning in traningService.Trainings)
+                                {
+                                    var state = Model.TrainingStates.FirstOrDefault(s => s.TrainingId == traning.Id);
+                                    TrainingState stateType = state?.State ?? TrainingState.NotLearned;
+                                    <div class="project-box-wrapper">
+                                        <div class="project-box" style="background-color: @stateType.GetColor();">
+                                            <div class="project-box-header">
+                                                @if (state != null)
+                                                {
+                                                    <span>@Html.DisplayFor(model => state.UpdateTime);</span>
+                                                    <div class="more-wrapper">
+                                                        <i class="project-btn-more fa-solid fa-graduation-cap">
+                                                        </i>
+                                                    </div>
+                                                }
+                                            </div>
+                                            <div class="project-box-content-header">
+                                                <a asp-action="Training" asp-route-id="@traning.Id" asp-route-dog="@Model.Id" class="box-content-header">@Html.DisplayFor(model => traning.Name)</a>
+                                                <p class="box-content-subheader">@Html.DisplayFor(model => traning.Description)</p>
+                                            </div>
+                                            <div class="box-progress-wrapper">
+                                                <p class="box-progress-header">Status: @Html.DisplayFor(model => stateType)</p>
+                                                <div class="box-progress-bar">
+                                                    <span class="box-progress" style="width: @stateType.GetPercent()%; background-color: var(--turquise)"></span>
+                                                </div>
+                                                <p class="box-progress-percentage">@stateType.GetPercent()%</p>
+                                            </div>
+                                            <div class="project-box-footer">
+    
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-3">
+                    <label for="tab3-2">Quests</label>
+                    <input id="tab3-2" name="tabs-three" type="radio">
+                    <div>
+                        <div class="projects-section-header">
+                            <p>Statuses</p>
+                        </div>
+                        <div class="projects-section-line">
+                            <div class="view-actions">
+                                <button class="view-btn list-view-2" title="List View">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list">
+                                        <line x1="8" y1="6" x2="21" y2="6" />
+                                        <line x1="8" y1="12" x2="21" y2="12" />
+                                        <line x1="8" y1="18" x2="21" y2="18" />
+                                        <line x1="3" y1="6" x2="3.01" y2="6" />
+                                        <line x1="3" y1="12" x2="3.01" y2="12" />
+                                        <line x1="3" y1="18" x2="3.01" y2="18" />
+                                    </svg>
+                                </button>
+                                <button class="view-btn grid-view-2 active" title="Grid View">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-grid">
+                                        <rect x="3" y="3" width="7" height="7" />
+                                        <rect x="14" y="3" width="7" height="7" />
+                                        <rect x="14" y="14" width="7" height="7" />
+                                        <rect x="3" y="14" width="7" height="7" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="project-boxes box-2 jsGridView">
+                            @{
+                                foreach (var quest in quests)
+                                {
+                                    var userQuest = dogQuests.FirstOrDefault(u => u.QuestId == quest.Id);
+                                    <div class="project-box-wrapper">
+                                        <div class="project-box">
+                                            <div class="project-box-header">
+                                                @if (userQuest != null)
+                                                {
+                                                    <span>State: @Html.DisplayTextFor(m => userQuest.State)</span>
+                                                }
+                                                else
+                                                {
+                                                    <span>State: Locked</span>
+                                                }
+                                            </div>
+                                            <div class="project-box-content-header">
+                                                <p class="box-content-header">@Html.DisplayFor(model => quest.Name)</p>
+                                                <p class="box-content-subheader">@Html.DisplayFor(model => quest.Description)</p>
+                                            </div>
+                                            <div class="project-box-footer">
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-3">
+                    <label for="tab3-3">Badgets</label>
+                    <input id="tab3-3" name="tabs-three" type="radio">
+                    <div>
+                        <div class="projects-section-header">
+                            <p>Statuses</p>
+                        </div>
+                        <div class="projects-section-line">
+                            <div class="view-actions">
+                                <button class="view-btn list-view-3" title="List View">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list">
+                                        <line x1="8" y1="6" x2="21" y2="6" />
+                                        <line x1="8" y1="12" x2="21" y2="12" />
+                                        <line x1="8" y1="18" x2="21" y2="18" />
+                                        <line x1="3" y1="6" x2="3.01" y2="6" />
+                                        <line x1="3" y1="12" x2="3.01" y2="12" />
+                                        <line x1="3" y1="18" x2="3.01" y2="18" />
+                                    </svg>
+                                </button>
+                                <button class="view-btn grid-view-3 active" title="Grid View">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-grid">
+                                        <rect x="3" y="3" width="7" height="7" />
+                                        <rect x="14" y="3" width="7" height="7" />
+                                        <rect x="14" y="14" width="7" height="7" />
+                                        <rect x="3" y="14" width="7" height="7" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="project-boxes box-3 jsGridView">
+                            @{
+                                foreach (var badge in @badges)
+                                {
+                                    var userBadge = dogBadges.FirstOrDefault(u => u.BadgeId == badge.Id);
+                                    <div class="project-box-wrapper">
+                                        <div class="project-box">
+                                            <div class="project-box-header">
+                                                <span>@Html.DisplayTextFor(m => badge.Name)</span>
+                                                <div class="more-wrapper">
+                                                    <div class="more-wrapper">
+                                                        @if (@userBadge != null)
+                                                        {
+                                                            <span>Goted</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span>Locked</span>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="project-box-content-header">
+                                                <img src="@("~/images/badges/" + badge.ImageUrl)" asp-append-version="true" alt="badge" />
+                                            </div>
+                                            <div class="project-box-footer">
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="messages-section">

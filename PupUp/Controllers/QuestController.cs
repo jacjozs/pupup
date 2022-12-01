@@ -59,7 +59,7 @@ namespace PupUp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,RequiredQuests,TrainingIds,Repetable,ActionType,RewardType,RewardValue")] Quest quest)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,RequiredQuests,TrainingIds,Repetable,UserQuest,ActionType,RewardType,RewardValue")] Quest quest)
         {
             if (ModelState.IsValid)
             {
@@ -94,7 +94,7 @@ namespace PupUp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,RequiredQuests,TrainingIds,Repetable,ActionType,RewardType,RewardValue")] Quest quest)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,RequiredQuests,TrainingIds,Repetable,UserQuest,ActionType,RewardType,RewardValue")] Quest quest)
         {
             if (id != quest.Id)
             {

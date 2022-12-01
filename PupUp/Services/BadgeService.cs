@@ -32,6 +32,20 @@ namespace PupUp.Services
                 }
             }
         }
+        public void AddDogBadges(IEnumerable<int> ids, int dogId)
+        {
+            foreach (var id in ids)
+            {
+                if (m_context.DogBadges.FirstOrDefault(u => u.BadgeId == id && u.DogId == dogId) == null)
+                {
+                    m_context.DogBadges.Add(new DogBadge()
+                    {
+                        BadgeId = id,
+                        DogId = dogId
+                    });
+                }
+            }
+        }
         public void DeleteImage(Badge badge)
         {
             if (string.IsNullOrEmpty(badge.ImageUrl)) return;

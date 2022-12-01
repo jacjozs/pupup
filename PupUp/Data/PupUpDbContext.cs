@@ -19,8 +19,10 @@ namespace PupUp.Data
         public DbSet<DogTrainingState> DogTrainingStates { get; set; }
         public DbSet<Quest> Quests { get; set; }
         public DbSet<UserQuest> UserQuests { get; set; }
+        public DbSet<DogQuest> DogQuests { get; set; }
         public DbSet<Badge> Badges { get; set; }
         public DbSet<UserBadge> UserBadges { get; set; }
+        public DbSet<DogBadge> DogBadges { get; set; }
         public DbSet<Points> Points { get; set; }
         public DbSet<PupUpEvent> Events { get; set; }
         public PupUpDbContext(DbContextOptions<PupUpDbContext> options) : base(options)
@@ -45,9 +47,19 @@ namespace PupUp.Data
             builder.Entity<UserQuest>().HasOne(s => s.Quest).WithMany();
             builder.Entity<UserQuest>().HasOne(s => s.User).WithMany();
 
+            builder.Entity<DogQuest>().HasKey(x => new { x.QuestId, x.DogId });
+            builder.Entity<DogQuest>().HasOne(s => s.Quest).WithMany();
+            builder.Entity<DogQuest>().HasOne(s => s.Dog).WithMany();
+
             builder.Entity<UserBadge>().HasKey(x => new { x.BadgeId, x.UserId });
             builder.Entity<UserBadge>().HasOne(s => s.Badge).WithMany();
             builder.Entity<UserBadge>().HasOne(s => s.User).WithMany();
+
+            builder.Entity<DogBadge>().HasKey(x => new { x.BadgeId, x.DogId });
+            builder.Entity<DogBadge>().HasOne(s => s.Badge).WithMany();
+            builder.Entity<DogBadge>().HasOne(s => s.Dog).WithMany();
+
+            builder.Entity<Dog>().HasMany(d => d.Badges).WithOne(s => s.Dog).HasForeignKey(d => d.DogId).HasPrincipalKey(d => d.Id).OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Points>().HasOne(s => s.User).WithOne(u => u.Points);
             builder.Entity<PupUpEvent>().HasOne(s => s.User).WithMany();

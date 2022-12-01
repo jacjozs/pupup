@@ -35,9 +35,9 @@ namespace PupUp.Controllers
         [Authorize]
         public IActionResult Profil()
         {
-            ViewData["Dogs"] = m_dbContext.Dogs.Where(d => d.UserId == User.Claims.GetClaim(ClaimTypes.NameIdentifier)).ToList();
-            ViewData["Quests"] = m_dbContext.Quests.ToList();
-            ViewData["Badges"] = m_dbContext.Badges.ToList();
+            ViewData["Dogs"] = m_dbContext.Dogs.Include(d => d.Badges).ThenInclude(b => b.Badge).Where(d => d.UserId == User.Claims.GetClaim(ClaimTypes.NameIdentifier)).ToList();
+            ViewData["Quests"] = m_dbContext.Quests.Where(q => q.UserQuest).ToList();
+            ViewData["Badges"] = m_dbContext.Badges.Where(b => b.UserBadge).ToList();
             ViewData["UserQuests"] = m_dbContext.UserQuests.Where(d => d.UserId == User.Claims.GetClaim(ClaimTypes.NameIdentifier)).ToList();
             ViewData["UserBadges"] = m_dbContext.UserBadges.Where(d => d.UserId == User.Claims.GetClaim(ClaimTypes.NameIdentifier)).ToList();
             ViewData["Events"] = m_dbContext.Events.Include(e => e.User).Where(d => d.UserId != User.Claims.GetClaim(ClaimTypes.NameIdentifier)).ToList();

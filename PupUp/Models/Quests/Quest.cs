@@ -18,6 +18,7 @@ namespace PupUp.Models.Quests
         public string RequiredQuests { get; set; }
         public string TrainingIds { get; set; }
         public bool Repetable { get; set; }
+        public bool UserQuest { get; set; }
         public ActionType ActionType { get;set; } 
         public RewardType RewardType { get; set; }
         public string RewardValue { get; set; }
