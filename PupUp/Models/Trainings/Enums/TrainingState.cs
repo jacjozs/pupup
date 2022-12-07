@@ -4,6 +4,7 @@ namespace PupUp.Models.Trainings.Enums
 {
     public enum TrainingState
     {
+        None,
         [Display(Name = "Not Learned")]
         NotLearned,
         [Display(Name = "In Progress")]

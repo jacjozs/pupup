@@ -60,6 +60,7 @@ namespace PupUp.Data
             builder.Entity<DogBadge>().HasOne(s => s.Dog).WithMany();
 
             builder.Entity<Dog>().HasMany(d => d.Badges).WithOne(s => s.Dog).HasForeignKey(d => d.DogId).HasPrincipalKey(d => d.Id).OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<Dog>().HasMany(d => d.Quests).WithOne(s => s.Dog).HasForeignKey(d => d.DogId).HasPrincipalKey(d => d.Id).OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Points>().HasOne(s => s.User).WithOne(u => u.Points);
             builder.Entity<PupUpEvent>().HasOne(s => s.User).WithMany();

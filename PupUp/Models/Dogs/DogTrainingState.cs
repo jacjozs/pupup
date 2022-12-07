@@ -10,7 +10,7 @@ namespace PupUp.Models.Dogs
         public int DogId { get; set; }
         public int TrainingId { get; set; }
         public Dog Dog { get; set; }
-        public TrainingState State { get; set; }
+        public TrainingState State { get; set; } = TrainingState.None;
         [Display(Name = "Update Time")]
         [DisplayFormat(DataFormatString = "{0:yyyy:MM:dd}", ApplyFormatInEditMode = true)]
         public DateTime UpdateTime { get; set; }

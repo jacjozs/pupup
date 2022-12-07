@@ -1,6 +1,7 @@
 ﻿using PupUp.Models.Badges;
 using PupUp.Models.Dogs.Enums;
 using PupUp.Models.Identity;
+using PupUp.Models.Quests;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -19,6 +20,7 @@ namespace PupUp.Models.Dogs
         public string UserId { get; set; }
         public PupUpUser User { get; set; }
         public List<DogTrainingState> TrainingStates { get; set; }
+        public List<DogQuest> Quests { get; set; }
         public List<DogBadge> Badges { get; set; }
     }
 }
